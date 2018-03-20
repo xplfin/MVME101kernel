@@ -1,0 +1,338 @@
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+*default*        0x00000000         0xffffffff
+
+Linker script and memory map
+
+Address of section .text set to 0x100000
+Address of section .data set to 0x1000
+LOAD cxSwitch.o
+LOAD interrupts.o
+LOAD intvec.o
+LOAD setprio.o
+LOAD semop.o
+LOAD waitint.o
+LOAD kernel.o
+LOAD io.o
+                0x80000000                PROVIDE (__executable_start, 0x80000000)
+                0x80000074                . = (0x80000000 + SIZEOF_HEADERS)
+
+.interp
+ *(.interp)
+
+.hash
+ *(.hash)
+
+.dynsym
+ *(.dynsym)
+
+.dynstr
+ *(.dynstr)
+
+.gnu.version
+ *(.gnu.version)
+
+.gnu.version_d
+ *(.gnu.version_d)
+
+.gnu.version_r
+ *(.gnu.version_r)
+
+.rel.dyn
+ *(.rel.init)
+ *(.rel.text .rel.text.* .rel.gnu.linkonce.t.*)
+ *(.rel.fini)
+ *(.rel.rodata .rel.rodata.* .rel.gnu.linkonce.r.*)
+ *(.rel.data.rel.ro* .rel.gnu.linkonce.d.rel.ro.*)
+ *(.rel.data .rel.data.* .rel.gnu.linkonce.d.*)
+ *(.rel.tdata .rel.tdata.* .rel.gnu.linkonce.td.*)
+ *(.rel.tbss .rel.tbss.* .rel.gnu.linkonce.tb.*)
+ *(.rel.ctors)
+ *(.rel.dtors)
+ *(.rel.got)
+ *(.rel.bss .rel.bss.* .rel.gnu.linkonce.b.*)
+
+.rela.dyn
+ *(.rela.init)
+ *(.rela.text .rela.text.* .rela.gnu.linkonce.t.*)
+ *(.rela.fini)
+ *(.rela.rodata .rela.rodata.* .rela.gnu.linkonce.r.*)
+ *(.rela.data .rela.data.* .rela.gnu.linkonce.d.*)
+ *(.rela.tdata .rela.tdata.* .rela.gnu.linkonce.td.*)
+ *(.rela.tbss .rela.tbss.* .rela.gnu.linkonce.tb.*)
+ *(.rela.ctors)
+ *(.rela.dtors)
+ *(.rela.got)
+ *(.rela.bss .rela.bss.* .rela.gnu.linkonce.b.*)
+
+.rel.plt
+ *(.rel.plt)
+
+.rela.plt
+ *(.rela.plt)
+
+.init
+ *(.init)
+
+.plt
+ *(.plt)
+
+.text           0x00100000      0xc9c
+ *(.text .stub .text.* .gnu.linkonce.t.*)
+ .text          0x00100000       0x60 cxSwitch.o
+                0x0010002a                Dispatch
+                0x00100000                SaveContext
+ .text          0x00100060       0xc4 interrupts.o
+                0x00100060                Exception
+                0x001000c8                ExtInt
+                0x0010006c                AVIntr
+ .text          0x00100124      0x41a intvec.o
+                0x0010013e                IVec
+                0x0010053e                EndIVec
+ *fill*         0x0010053e        0x2 4e754e75
+ .text          0x00100540       0xfc setprio.o
+                0x00100588                CClrLevel
+                0x0010056a                SetLevel
+                0x00100566                CSetLevel
+                0x00100548                Trap2
+                0x0010058c                ClrLevel
+                0x00100540                SetPrio
+ .text          0x0010063c       0x74 semop.o
+                0x0010067e                SemV
+                0x0010063c                SemP
+                0x00100686                Trap1
+                0x00100644                Trap0
+ .text          0x001006b0       0x76 waitint.o
+                0x001006c2                Trap3
+                0x001006ee                WaitAnyInt
+                0x001006b0                WaitInt
+                0x00100704                Trap4
+ *fill*         0x00100726        0x2 4e754e75
+ .text          0x00100728       0x62 kernel.o
+                0x00100782                NullProc
+                0x00100728                PickNext
+ *fill*         0x0010078a        0x2 4e754e75
+ .text          0x0010078c      0x510 io.o
+                0x00100982                AddChar
+                0x00100bf2                EPCI1Reader
+                0x0010078c                InitEPCI
+                0x00100904                PutString
+                0x00100930                ReadChar
+                0x00100b80                EPCIWriter
+                0x00100af2                EPCI1Handler
+                0x00100c0c                EPCI2Reader
+                0x00100a74                EPCIHandler
+                0x00100c2a                EPCI1Writer
+                0x00100c46                EPCI2Writer
+                0x001008a4                WriteChar
+                0x001009fa                PickChar
+                0x001007b2                InitPIA
+                0x0010086c                InitIO
+                0x00100806                InitTimer
+                0x00100c64                TimerHandler
+                0x00100b06                EPCI2Handler
+                0x00100b1c                EPCIReader
+ *(.text.*personality*)
+ *(.gnu.warning)
+
+.fini
+ *(.fini)
+                0x00100c9c                PROVIDE (__etext, .)
+                0x00100c9c                PROVIDE (_etext, .)
+                0x00100c9c                PROVIDE (etext, .)
+
+.rodata         0x00100c9c       0x6a
+ *(.rodata .rodata.* .gnu.linkonce.r.*)
+ .rodata        0x00100c9c       0x6a kernel.o
+
+.rodata1
+ *(.rodata1)
+
+.eh_frame_hdr
+ *(.eh_frame_hdr)
+
+.eh_frame
+ *(.eh_frame)
+
+.gcc_except_table
+ *(.gcc_except_table .gcc_except_table.*)
+                0x00102d06                . = (ALIGN (0x2000) + (. & 0x1fff))
+
+.eh_frame
+ *(.eh_frame)
+
+.gcc_except_table
+ *(.gcc_except_table .gcc_except_table.*)
+
+.tdata
+ *(.tdata .tdata.* .gnu.linkonce.td.*)
+
+.tbss
+ *(.tbss .tbss.* .gnu.linkonce.tb.*)
+ *(.tcommon)
+
+.preinit_array  0x00102d06        0x0
+                0x00102d06                PROVIDE (__preinit_array_start, .)
+ *(.preinit_array)
+                0x00102d06                PROVIDE (__preinit_array_end, .)
+
+.init_array     0x00102d06        0x0
+                0x00102d06                PROVIDE (__init_array_start, .)
+ *(SORT(.init_array.*))
+ *(.init_array)
+                0x00102d06                PROVIDE (__init_array_end, .)
+
+.fini_array     0x00102d06        0x0
+                0x00102d06                PROVIDE (__fini_array_start, .)
+ *(.fini_array)
+ *(SORT(.fini_array.*))
+                0x00102d06                PROVIDE (__fini_array_end, .)
+
+.ctors
+ *crtbegin*.o(.ctors)
+ *(EXCLUDE_FILE(*crtend*.o) .ctors)
+ *(SORT(.ctors.*))
+ *(.ctors)
+
+.dtors
+ *crtbegin*.o(.dtors)
+ *(EXCLUDE_FILE(*crtend*.o) .dtors)
+ *(SORT(.dtors.*))
+ *(.dtors)
+
+.jcr
+ *(.jcr)
+
+.data.rel.ro
+ *(.data.rel.ro.local* .gnu.linkonce.d.rel.ro.local.*)
+ *(.data.rel.ro* .gnu.linkonce.d.rel.ro.*)
+
+.dynamic
+ *(.dynamic)
+
+.got
+ *(.got.plt)
+ *(.got)
+
+.data           0x00001000      0x638
+ *(.data .data.* .gnu.linkonce.d.*)
+ .data          0x00001000        0x0 cxSwitch.o
+ .data          0x00001000        0x0 interrupts.o
+ .data          0x00001000        0x0 intvec.o
+ .data          0x00001000        0x0 setprio.o
+ .data          0x00001000        0x0 semop.o
+ .data          0x00001000        0x0 waitint.o
+ .data          0x00001000      0x500 kernel.o
+                0x00001000                ProcTable
+ .data          0x00001500      0x138 io.o
+                0x00001500                Ports
+                0x00001538                Buffers
+ *(.gnu.linkonce.d.*personality*)
+
+.data1
+ *(.data1)
+                0x00001638                _edata = .
+                0x00001638                PROVIDE (edata, .)
+                0x00001638                __bss_start = .
+
+.bss            0x00001638        0x8
+ *(.dynbss)
+ *(.bss .bss.* .gnu.linkonce.b.*)
+ .bss           0x00001638        0x0 cxSwitch.o
+ .bss           0x00001638        0x0 interrupts.o
+ .bss           0x00001638        0x0 intvec.o
+ .bss           0x00001638        0x0 setprio.o
+ .bss           0x00001638        0x0 semop.o
+ .bss           0x00001638        0x0 waitint.o
+ .bss           0x00001638        0x6 kernel.o
+                0x00001638                Current
+                0x0000163c                CurIntPrio
+                0x0000163d                CurIntMask
+ *fill*         0x0000163e        0x2 00
+ .bss           0x00001640        0x0 io.o
+ *(COMMON)
+                0x00001640                . = ALIGN ((. != 0x0)?0x4:0x1)
+                0x00001640                . = ALIGN (0x4)
+                0x00001640                . = ALIGN (0x4)
+                0x00001640                _end = .
+                0x00001640                PROVIDE (end, .)
+
+.stab
+ *(.stab)
+
+.stabstr
+ *(.stabstr)
+
+.stab.excl
+ *(.stab.excl)
+
+.stab.exclstr
+ *(.stab.exclstr)
+
+.stab.index
+ *(.stab.index)
+
+.stab.indexstr
+ *(.stab.indexstr)
+
+.comment        0x00000000       0x24
+ *(.comment)
+ .comment       0x00000000       0x12 kernel.o
+ .comment       0x00000012       0x12 io.o
+
+.debug
+ *(.debug)
+
+.line
+ *(.line)
+
+.debug_srcinfo
+ *(.debug_srcinfo)
+
+.debug_sfnames
+ *(.debug_sfnames)
+
+.debug_aranges
+ *(.debug_aranges)
+
+.debug_pubnames
+ *(.debug_pubnames)
+
+.debug_info
+ *(.debug_info .gnu.linkonce.wi.*)
+
+.debug_abbrev
+ *(.debug_abbrev)
+
+.debug_line
+ *(.debug_line)
+
+.debug_frame
+ *(.debug_frame)
+
+.debug_str
+ *(.debug_str)
+
+.debug_loc
+ *(.debug_loc)
+
+.debug_macinfo
+ *(.debug_macinfo)
+
+.debug_weaknames
+ *(.debug_weaknames)
+
+.debug_funcnames
+ *(.debug_funcnames)
+
+.debug_typenames
+ *(.debug_typenames)
+
+.debug_varnames
+ *(.debug_varnames)
+
+/DISCARD/
+ *(.note.GNU-stack)
+OUTPUT(m101kernel.bin elf32-m68k)
